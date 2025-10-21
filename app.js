@@ -33,21 +33,68 @@ const connect = async () => {
                 age: ageToCreate,
             })
             console.log(`Customer created:\n${createdCustomer}\n`)
-
+            
         } else if (actionToRun === `2`) { // View all customers
             customerArray.forEach((cust, index) => {
-                console.log(`${index + 1}. ID: ${cust.id} -- Name: ${cust.name}, Age: ${cust.age} \n`)
+                console.log(`${index + 1}. ID: ${cust.id} -- Name: ${cust.name}, Age: ${cust.age}`)
             })
-        
+            console.log(`\n`);
+            
         } else if (actionToRun === `3`) { // Udpdate a customer
             if (customerArrayLength > 0) {
-                console.log(`3 good`)
+                
+                customerArray.forEach((cust, index) => {
+                    console.log(`${index + 1}. ID: ${cust.id} -- Name: ${cust.name}, Age: ${cust.age}`)
+                })
+                console.log(`\n`);
+
+                let customerNumberToUpdate = prompt(`Which customer would you like to update? (Enter the line number) `)
+                
+                customerArray.forEach((cust, index) => {
+                    if(index + 1 === Number(customerNumberToUpdate)) {
+                        console.log(`Customer to update: ${customerNumberToUpdate}. ID: ${cust.id} -- Name: ${cust.name}, Age: ${cust.age}`)
+                        customerIdToUpdate = cust.id
+                    }
+                })
+
+                console.log(`Update the record:\n`);
+                let CustomerNameToUpdate = prompt(`Name: `)
+                let CustomerAgeToUpdate = prompt(`Age: `)                
+                
+                const updatedCustomer = await Customer.findByIdAndUpdate(
+                customerIdToUpdate,
+                {
+                    name: CustomerNameToUpdate,
+                    age: CustomerAgeToUpdate,
+                },
+                { new:true }
+            )
+
             } else {
                 console.log(`No available customers to update`);
             }
         } else if (actionToRun === '4') { // Delete a customer
             if (customerArrayLength > 0) {
-                console.log(`4 good`)
+                
+                customerArray.forEach((cust, index) => {
+                    console.log(`${index + 1}. ID: ${cust.id} -- Name: ${cust.name}, Age: ${cust.age}`)
+                })
+                console.log(`\n`);
+
+                let customerNumberToDelete = prompt(`Which customer would you like to delete? (Enter the line number) `)
+                console.log(`\n`);
+                customerArray.forEach((cust, index) => {
+                    if(index + 1 === Number(customerNumberToDelete)) {
+                        console.log(`Customer to delete: ${customerNumberToDelete}. ID: ${cust.id} -- Name: ${cust.name}, Age: ${cust.age}\n`)
+                        customerIdToDelete = cust.id
+                        customerNameToDelete = cust.name
+                        customerAgeToDelete = cust.age
+                    }
+                })
+                
+                const D = await Customer.findByIdAndDelete(customerIdToDelete) // delete a given ID
+                console.log(`${customerNumberToDelete}. ID: ${customerIdToDelete} -- Name: ${customerNameToDelete}, Age: ${customerAgeToDelete} has been deleted`)
+                
             } else {
                 console.log(`No available customers to delete`);
             }
